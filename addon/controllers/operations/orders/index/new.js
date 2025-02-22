@@ -1461,6 +1461,7 @@ export default class OperationsOrdersIndexNewController extends BaseController {
     @action addEntity(importId = null) {
         const entity = this.store.createRecord('entity', {
             _import_id: typeof importId === 'string' ? importId : null,
+            currency: this.currentUser?.company?.currency ?? 'EGP',
         });
 
         this.entities.pushObject(entity);

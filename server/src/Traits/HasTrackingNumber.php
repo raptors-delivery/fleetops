@@ -142,7 +142,7 @@ trait HasTrackingNumber
             return $this->payload->getPickupRegion();
         }
 
-        return 'SG';
+        return 'EG';
     }
 
     public function getPickupLocation()

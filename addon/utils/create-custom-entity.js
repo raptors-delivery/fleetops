@@ -12,6 +12,7 @@ export default function createCustomEntity(name = '', type = '', description = '
             type,
             dimensions_unit: 'cm',
             weight_unit: 'kg',
+            currency: 'EGP',
             photo_url: typeof props.photo_url === 'string' ? props.photo_url : get(config, 'defaultValues.entityImage'),
             ...props,
             _internalModel: {

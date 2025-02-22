@@ -182,7 +182,7 @@ export default class CustomerFormPanelComponent extends Component {
     @action async editAddress() {
         let place;
 
-        if (this.customer.has_place) {
+        if (this.customer.place_uuid) {
             place = await this.customer.place;
         } else {
             place = this.store.createRecord('place');
@@ -190,7 +190,7 @@ export default class CustomerFormPanelComponent extends Component {
 
         return this.contextPanel.focus(place, 'editing', {
             onAfterSave: (place) => {
-                this.selectVendorAddress(place);
+                this.selectContactAddress(place);
                 this.contextPanel.clear();
             },
         });

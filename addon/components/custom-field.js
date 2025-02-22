@@ -15,6 +15,7 @@ export default class CustomFieldComponent extends Component {
     @tracked value;
     @tracked file;
     @tracked uploadedFile;
+    @tracked defaultCurrency;
     acceptedFileTypes = [
         'application/vnd.ms-excel',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -48,6 +49,7 @@ export default class CustomFieldComponent extends Component {
         this.value = customField.value;
         this.orderConfig = orderConfig;
         this.order = order;
+        this.defaultCurrency = 'EGP';
         this.customFieldComponent = typeof customField.component === 'string' ? customField.component : 'input';
     }
 

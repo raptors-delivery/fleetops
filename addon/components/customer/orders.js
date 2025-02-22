@@ -13,6 +13,7 @@ import registerComponent from '@fleetbase/ember-core/utils/register-component';
 import OrderProgressCardComponent from '../order-progress-card';
 import DisplayPlaceComponent from '../display-place';
 import CustomerCreateOrderFormComponent from './create-order-form';
+import parseCurrency from '@fleetbase/ember-ui/utils/parse';
 
 const MAP_TARGET_FOCUS_PADDING_BOTTOM_RIGHT = [200, 0];
 const MAP_TARGET_FOCUS_REFOCUS_PANBY = [150, 0];
@@ -39,6 +40,7 @@ export default class CustomerOrdersComponent extends Component {
     @tracked route;
     @tracked query;
     @tracked tileSourceUrl = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
+    @tracked totalOrderAmount = 0;
 
     constructor(owner) {
         super(...arguments);
@@ -124,9 +126,12 @@ export default class CustomerOrdersComponent extends Component {
 
     @action viewOrder(order, options = { resetOrderRoute: false }) {
         this.selectedOrder = order;
+        console.log('Selected Order:', order);
         // start loading order tracking activity
         order.loadTrackingActivity();
+        order.loadPayload();
         this.urlSearchParams.addParamToCurrentUrl('order', order.public_id);
+        this.totalOrderAmount = this.calculateTotalOrderAmount(order);
         const driverCurrentLocation = order.get('tracker_data.driver_current_location');
         if (driverCurrentLocation) {
             this.latitude = driverCurrentLocation.coordinates[1];
@@ -205,6 +210,7 @@ export default class CustomerOrdersComponent extends Component {
 
     @action unselectOrder() {
         this.selectedOrder = null;
+        this.totalOrderAmount = 0;
         this.removeRouteControl();
         this.urlSearchParams.removeParamFromCurrentUrl('order');
     }
@@ -379,5 +385,24 @@ export default class CustomerOrdersComponent extends Component {
         if (this.isCreatingOrder()) {
             this.startOrderCreation();
         }
+    }
+
+    calculateTotalOrderAmount(order) {
+        const payload = order.get('payload');
+        let totalAmount = 0;
+
+        payload.entities.forEach((entity) => {
+            const price = parseCurrency(entity.price);
+            totalAmount += price * 100.0; // convert to pts
+            console.log('Entity Price:', price);
+        });
+
+        const serviceFee = parseFloat(order.get('purchase_rate.service_quote.amount'));
+        console.log('Service Fee:', serviceFee);
+        totalAmount += serviceFee;
+
+        console.log('Total Order Amount:', totalAmount);
+
+        return totalAmount;
     }
 }

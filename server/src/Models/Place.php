@@ -247,6 +247,18 @@ class Place extends Model
     }
 
     /**
+     * Returns a Point instance from the location of the model.
+     */
+    public function getLocationAsGeoJSONPoint()
+    {
+        $point = $this->getLocationAsPoint();
+        $x     = $point->getLng();
+        $y     = $point->getLat();
+
+        return \Brick\Geo\Point::xy($x, $y);
+    }
+
+    /**
      * Fills empty address attributes with Google address attributes.
      *
      * @return Place $this

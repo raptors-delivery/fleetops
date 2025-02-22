@@ -37,8 +37,9 @@ class Geocoding
     public static function geocode(string $searchQuery, $latitude = null, $longitude = null): Collection
     {
         $httpClient = new Client();
-        $provider   = new GoogleMaps($httpClient, null, config('services.google_maps.api_key', env('GOOGLE_MAPS_API_KEY')));
-        $geocoder   = new StatefulGeocoder($provider, 'en');
+        $region     = config('services.google_maps.locale', env('GOOGLE_MAPS_LOCALE', 'us'));
+        $provider   = new GoogleMaps($httpClient, $region, config('services.google_maps.api_key', env('GOOGLE_MAPS_API_KEY')));
+        $geocoder   = new StatefulGeocoder($provider, $region);
 
         try {
             if ($latitude && $longitude) {
@@ -82,8 +83,9 @@ class Geocoding
     public static function reverseFromQuery(string $searchQuery, $latitude, $longitude): Collection
     {
         $httpClient = new Client();
-        $provider   = new GoogleMaps($httpClient, null, config('services.google_maps.api_key', env('GOOGLE_MAPS_API_KEY')));
-        $geocoder   = new StatefulGeocoder($provider, 'en');
+        $region     = config('services.google_maps.locale', env('GOOGLE_MAPS_LOCALE', 'us'));
+        $provider   = new GoogleMaps($httpClient, $region, config('services.google_maps.api_key', env('GOOGLE_MAPS_API_KEY')));
+        $geocoder   = new StatefulGeocoder($provider, $region);
 
         if (empty($searchQuery)) {
             return collect();
@@ -128,8 +130,9 @@ class Geocoding
     public static function reverseFromCoordinates($latitude, $longitude, ?string $searchQuery = null): Collection
     {
         $httpClient = new Client();
-        $provider   = new GoogleMaps($httpClient, null, config('services.google_maps.api_key', env('GOOGLE_MAPS_API_KEY')));
-        $geocoder   = new StatefulGeocoder($provider, 'en');
+        $region     = config('services.google_maps.locale', env('GOOGLE_MAPS_LOCALE', 'us'));
+        $provider   = new GoogleMaps($httpClient, $region, config('services.google_maps.api_key', env('GOOGLE_MAPS_API_KEY')));
+        $geocoder   = new StatefulGeocoder($provider, $region);
 
         if (empty($latitude) && empty($longitude)) {
             return collect();
@@ -216,6 +219,6 @@ class Geocoding
 
     public static function canGoogleGeocode(): bool
     {
-        return Utils::notEmpty(config('services.google_maps.api_key'));
+        return Utils::notEmpty(config('services.google_maps.api_key', env('GOOGLE_MAPS_API_KEY')));
     }
 }
