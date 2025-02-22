@@ -123,7 +123,7 @@ class ServiceQuote extends Model
 
     public function getServiceRateNameAttribute(): string
     {
-        return data_get($this, 'serviceRate.service_name');
+        return data_get($this, 'serviceRate.service_name') ?? 'unknown_or_deleted';
     }
 
     public function fromIntegratedVendor(): bool
