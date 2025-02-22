@@ -252,11 +252,12 @@ class Place extends Model
     public function getLocationAsGeoJSONPoint()
     {
         $point = $this->getLocationAsPoint();
-        $x = $point->getLng();
-        $y = $point->getLat();
+        $x     = $point->getLng();
+        $y     = $point->getLat();
 
         return \Brick\Geo\Point::xy($x, $y);
     }
+
     /**
      * Fills empty address attributes with Google address attributes.
      *

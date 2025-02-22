@@ -168,9 +168,9 @@ class TrackingNumber extends Model
      */
     public static function generateTrackingNumber($region = 'EG', $length = 10): string
     {
-        $company     = \Fleetbase\Models\Company::where('uuid', session('company'))->withoutGlobalScopes()->first();
-        $companyName = $company ? strtoupper(substr($company->name, 0, 3)) : null;
-        $number      = $companyName ?? 'FLB';
+        $company        = \Fleetbase\Models\Company::where('uuid', session('company'))->withoutGlobalScopes()->first();
+        $companyName    = $company ? strtoupper(substr($company->name, 0, 3)) : null;
+        $number         = $companyName ?? 'FLB';
         $companyCountry = $company ? strtoupper(substr($company->country, 0, 2)) : $region;
 
         for ($i = 0; $i < $length; $i++) {

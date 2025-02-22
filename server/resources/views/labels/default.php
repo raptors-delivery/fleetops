@@ -12,6 +12,10 @@ use Fleetbase\Support\Utils; ?>
 </head>
 
 <style>
+	body {
+		font-family: DejaVu Sans, serif;
+		font-optical-sizing: auto;
+	}
 	.group:after {
 		content: "";
 		display: table;
@@ -41,8 +45,8 @@ use Fleetbase\Support\Utils; ?>
 	}
 </style>
 
-<body bgcolor="#f7f7f7">
-	<div style="width: 420px; border: 2px #414141 solid; margin: auto;">
+<body>
+	<div style="width: 620px; border: 2px #414141 solid; margin: auto;">
 		<div class="group" style="border-bottom: 1px #414141 solid; overflow: hidden;">
 			<div style="float: left; width: 130px; height: 120px; border-right: 1px #414141 solid; text-align: center; padding: 10px; box-sizing: border-box;">
 				<img src="data:image/png;base64,<?= Utils::notEmpty($trackingNumber) ? $trackingNumber->qr_code : $order->trackingNumber->qr_code ?>" style="width: 100%; height: 100%; object-fit: cover;">
