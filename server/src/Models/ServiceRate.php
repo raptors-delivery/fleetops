@@ -473,7 +473,7 @@ class ServiceRate extends Model
             $place = Place::createFromMixed($place);
 
             if ($place instanceof Place) {
-                return $place->getLocationAsPoint();
+                return $place->getLocationAsGeoJSONPoint();
             }
         });
 

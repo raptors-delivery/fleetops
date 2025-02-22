@@ -60,7 +60,7 @@ export default class CustomerCreateOrderFormComponent extends Component {
     @tracked customFieldGroups = [];
     @tracked customFields = [];
     @tracked customFieldValues = {};
-    @tracked isCustomFieldsValid = true;
+    @tracked isCustomFieldsValid = false;
     @tracked paymentsEnabled = false;
     @tracked paymentsOnboardCompleted = false;
     @tracked acceptedFileTypes = [
@@ -110,6 +110,7 @@ export default class CustomerCreateOrderFormComponent extends Component {
     @task *load() {
         yield this.loadCustomerOrderConfig.perform();
         yield this.checkForCheckoutSession.perform();
+        yield this.setPickupPlace.perform();
     }
 
     @task *loadCustomerOrderConfig() {
@@ -151,6 +152,19 @@ export default class CustomerCreateOrderFormComponent extends Component {
         }
     }
 
+    @task *setPickupPlace() {
+        if (this.customer) {
+            console.log('customer', this.customer);
+            const customerPlaces = yield this.store.findAll('place', { reload: false });
+            const customerPlace = customerPlaces.find((place) => place.id === this.customer.place_uuid);
+            if (customerPlace) {
+                this.setPayloadPlace('pickup', customerPlace);
+            } else {
+                this.notifications.error(this.intl.t('fleet-ops.operations.orders.index.new.no-default-pickup'));
+            }
+        }
+    }
+
     @task *createOrder() {
         // validate order inputs
         if (!this.isValid()) {
@@ -161,7 +175,7 @@ export default class CustomerCreateOrderFormComponent extends Component {
         for (let i = 0; i < this.customFields.length; i++) {
             const customField = this.customFields[i];
             if (customField.required) {
-                const customFieldValue = this.customFieldValues[customField.id];
+                const customFieldValue = this.customFieldValues[customField.name];
                 if (!customFieldValue || isBlank(customFieldValue.value)) {
                     return this.notifications.error(this.intl.t('fleet-ops.operations.orders.index.new.input-field-required', { inputFieldName: customField.label }));
                 }
@@ -175,9 +189,9 @@ export default class CustomerCreateOrderFormComponent extends Component {
 
         // create custom field values
         for (let customFieldId in this.customFieldValues) {
-            const { value, value_type } = this.customFieldValues[customFieldId];
+            const { value, value_type, id } = this.customFieldValues[customFieldId];
             const customFieldValue = this.store.createRecord('custom-field-value', {
-                custom_field_uuid: customFieldId,
+                custom_field_uuid: id,
                 value,
                 value_type,
             });
@@ -291,8 +305,8 @@ export default class CustomerCreateOrderFormComponent extends Component {
             group.set(
                 'customFields',
                 this.customFields.filter((customField) => {
-                    if (this.customFieldValues[customField.id]) {
-                        const { value, value_type } = this.customFieldValues[customField.id];
+                    if (this.customFieldValues[customField.name]) {
+                        const { value, value_type } = this.customFieldValues[customField.name];
                         if (value_type === 'date') {
                             customField.value = new Date(value);
                         } else {
@@ -309,9 +323,10 @@ export default class CustomerCreateOrderFormComponent extends Component {
     @action setCustomFieldValue(value, customField) {
         this.customFieldValues = {
             ...this.customFieldValues,
-            [customField.id]: {
+            [customField.name]: {
                 value,
                 value_type: this._getCustomFieldValueType(customField),
+                id: customField.id,
             },
         };
         this.checkIfCustomFieldsValid();
@@ -322,7 +337,7 @@ export default class CustomerCreateOrderFormComponent extends Component {
             if (!customField.required) {
                 return true;
             }
-            const customFieldValue = this.customFieldValues[customField.id];
+            const customFieldValue = this.customFieldValues[customField.name];
             return customFieldValue && !isBlank(customFieldValue.value);
         });
     }

@@ -241,7 +241,7 @@
                                                                         {{#if entity.price}}
                                                                             <div class="text-xs">
                                                                                 <span class="font-semibold">Price:</span>
-                                                                                <span>{{format-currency entity.price entity.currency}}</span>
+                                                                                <span>{{entity.price}}</span>
                                                                             </div>
                                                                         {{/if}}
                                                                     </div>
@@ -290,7 +290,7 @@
                                                                         </td>
                                                                         <td class="border-b-0">
                                                                             <div class="flex flex-row items-center justify-end">{{format-currency
-                                                                                    order.purchase_rate.service_quote.amount
+                                                                                    this.totalOrderAmount
                                                                                     order.purchase_rate.service_quote.currency
                                                                                 }}</div>
                                                                         </td>

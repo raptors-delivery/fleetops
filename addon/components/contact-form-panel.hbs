@@ -121,7 +121,7 @@
                                     @type="default"
                                     @size="xs"
                                     @icon="edit"
-                                    @text={{if this.contact.has_place (t "fleet-ops.component.contact-form-panel.edit") (t "fleet-ops.component.contact-form-panel.new-address")}}
+                                    @text={{if this.contact.place_uuid (t "fleet-ops.component.contact-form-panel.edit") (t "fleet-ops.component.contact-form-panel.new-address")}}
                                     @onClick={{this.editAddress}}
                                     @disabled={{unauthorized}}
                                 />

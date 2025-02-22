@@ -166,11 +166,12 @@ class TrackingNumber extends Model
      *
      * @var string
      */
-    public static function generateTrackingNumber($region = 'SG', $length = 10): string
+    public static function generateTrackingNumber($region = 'EG', $length = 10): string
     {
-        $company     = \Fleetbase\Models\Company::where('uuid', session('company'))->withoutGlobalScopes()->first();
-        $companyName = $company ? strtoupper(substr($company->name, 0, 3)) : null;
-        $number      = $companyName ?? 'FLB';
+        $company        = \Fleetbase\Models\Company::where('uuid', session('company'))->withoutGlobalScopes()->first();
+        $companyName    = $company ? strtoupper(substr($company->name, 0, 3)) : null;
+        $number         = $companyName ?? 'FLB';
+        $companyCountry = $company ? strtoupper(substr($company->country, 0, 2)) : $region;
 
         for ($i = 0; $i < $length; $i++) {
             $number .= mt_rand(0, 9);
@@ -184,7 +185,7 @@ class TrackingNumber extends Model
      *
      * @var string
      */
-    public static function generateNumber($region = 'SG', $length = 10)
+    public static function generateNumber($region = 'EG', $length = 10)
     {
         $n  = static::generateTrackingNumber($region, $length);
         $tr = static::where('tracking_number', $n)
@@ -262,7 +263,7 @@ class TrackingNumber extends Model
             $values['owner_type'] = Utils::getMutationType($owner);
         }
 
-        $values['tracking_number'] = TrackingNumber::generateNumber($values['region'] ?? 'SG');
+        $values['tracking_number'] = TrackingNumber::generateNumber($values['region'] ?? 'EG');
         $values['qr_code']         = DNS2D::getBarcodePNG($values['owner_uuid'], 'QRCODE');
         $values['barcode']         = DNS2D::getBarcodePNG($values['owner_uuid'], 'PDF417');
 

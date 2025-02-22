@@ -1371,6 +1371,7 @@ fleet-ops:
           invalid-coordinates: Invalid coordinates!
           pickup: Pickup
           select-pickup: Select Pickup
+          no-default-pickup: No default pickup location set for this customer.
           dropoff: Dropoff
           select-dropoff: Select Dropoff
           return: Return

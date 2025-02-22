@@ -240,7 +240,7 @@ class OrderController extends FleetOpsController
         $disk    = $request->input('disk', config('filesystems.default'));
         $files   = $request->input('files');
         $files   = File::whereIn('uuid', $files)->get();
-        $country = $request->input('country', Utils::or($info, ['country_name', 'region'], 'Singapore'));
+        $country = $request->input('country', Utils::or($info, ['country_name', 'region'], 'Egypt'));
 
         $validFileTypes = ['csv', 'tsv', 'xls', 'xlsx'];
         $imports        = collect();
