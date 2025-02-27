@@ -1242,6 +1242,10 @@ packages:
     resolution: {integrity: sha512-gcJuHiXgnrzaU8NyU+2bMbtS6PNOr5v5B8OXBqaBvTCsMpXLvKo8OBOQFCoUN0rPX2J6VaFqrbi/371sMvzZug==}
     engines: {node: 12.* || 14.* || >= 16}
 
+  '@embroider/addon-shim@1.9.0':
+    resolution: {integrity: sha512-fMzayl/licUL8VRAy4qXROKcYvHwUbV8aTh4m97L5/MRuVpxbcAy92DGGTqx5OBKCSQN3gMg+sUKeE6AviefpQ==}
+    engines: {node: 12.* || 14.* || >= 16}
+
   '@embroider/addon@0.30.0':
     resolution: {integrity: sha512-hBgskhX38RMIyHcnUpRt+KbddLMPLVOFdLp4qhv7Vs881SPDwsbo7pir4KpILmnoqcvBMh1MCVY970tYaAyMcQ==}
     engines: {node: 10.* || >= 12}
@@ -1265,6 +1269,10 @@ packages:
 
   '@embroider/shared-internals@3.0.0':
     resolution: {integrity: sha512-5J5ipUMCAinQS38WW7wedruq5Z4VnHvNo+ZgOduw0PtI9w0CQWx7/HE+98PBDW8jclikeF+aHwF317vc1hwuzg==}
+    engines: {node: 12.* || 14.* || >= 16}
+
+  '@embroider/shared-internals@2.9.0':
+    resolution: {integrity: sha512-8untWEvGy6av/oYibqZWMz/yB+LHsKxEOoUZiLvcpFwWj2Sipc0DcXeTJQZQZ++otNkLCWyDrDhOLrOkgjOPSg==}
     engines: {node: 12.* || 14.* || >= 16}
 
   '@embroider/test-setup@3.0.3':
@@ -3545,6 +3553,9 @@ packages:
   decompress-response@3.3.0:
     resolution: {integrity: sha512-BzRPQuY1ip+qDonAOz42gRm/pg9F768C+npV/4JOsxRC2sq+Rlk+Q4ZCAsOhnIaMrgarILY+RMUIvMmmX1qAEA==}
     engines: {node: '>=4'}
+
+  decorator-transforms@2.3.0:
+    resolution: {integrity: sha512-jo8c1ss9yFPudHuYYcrJ9jpkDZIoi+lOGvt+Uyp9B+dz32i50icRMx9Bfa8hEt7TnX1FyKWKkjV+cUdT/ep2kA==}
 
   decorator-transforms@2.3.0:
     resolution: {integrity: sha512-jo8c1ss9yFPudHuYYcrJ9jpkDZIoi+lOGvt+Uyp9B+dz32i50icRMx9Bfa8hEt7TnX1FyKWKkjV+cUdT/ep2kA==}
@@ -7356,6 +7367,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  semver@7.7.1:
+    resolution: {integrity: sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   send@0.19.0:
     resolution: {integrity: sha512-dW41u5VfLXu8SJh5bwRmyYUbAoSB3c9uQh6L8h/KtsFREPWpbX1lrljJo186Jc4nmci/sGUZ9a0a0J2zgfq2hw==}
     engines: {node: '>= 0.8.0'}
@@ -9705,6 +9721,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@embroider/addon-shim@1.9.0':
+    dependencies:
+      '@embroider/shared-internals': 2.9.0
+      broccoli-funnel: 3.0.8
+      common-ancestor-path: 1.0.1
+      semver: 7.7.1
+    transitivePeerDependencies:
+      - supports-color
+
   '@embroider/addon@0.30.0':
     dependencies:
       ember-cli-babel: 7.26.11
@@ -9766,6 +9791,23 @@ snapshots:
       resolve-package-path: 4.0.3
       resolve.exports: 2.0.3
       semver: 7.7.2
+      typescript-memoize: 1.1.1
+    transitivePeerDependencies:
+      - supports-color
+
+  '@embroider/shared-internals@2.9.0':
+    dependencies:
+      babel-import-util: 2.1.1
+      debug: 4.4.0
+      ember-rfc176-data: 0.3.18
+      fs-extra: 9.1.0
+      is-subdir: 1.2.0
+      js-string-escape: 1.0.1
+      lodash: 4.17.21
+      minimatch: 3.1.2
+      pkg-entry-points: 1.1.1
+      resolve-package-path: 4.0.3
+      semver: 7.7.1
       typescript-memoize: 1.1.1
     transitivePeerDependencies:
       - supports-color
@@ -12811,6 +12853,13 @@ snapshots:
     dependencies:
       '@babel/plugin-syntax-decorators': 7.27.1(@babel/core@7.27.1)
       babel-import-util: 3.0.1
+    transitivePeerDependencies:
+      - '@babel/core'
+
+  decorator-transforms@2.3.0(@babel/core@7.25.2):
+    dependencies:
+      '@babel/plugin-syntax-decorators': 7.25.9(@babel/core@7.25.2)
+      babel-import-util: 3.0.0
     transitivePeerDependencies:
       - '@babel/core'
 
@@ -17978,6 +18027,8 @@ snapshots:
   semver@6.3.1: {}
 
   semver@7.7.2: {}
+
+  semver@7.7.1: {}
 
   send@0.19.0:
     dependencies:
