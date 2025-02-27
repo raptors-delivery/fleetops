@@ -8,6 +8,7 @@ use Fleetbase\FleetOps\Http\Resources\v1\Contact as ContactResource;
 use Fleetbase\FleetOps\Http\Resources\v1\DeletedResource;
 use Fleetbase\FleetOps\Models\Contact;
 use Fleetbase\Http\Controllers\Controller;
+use Fleetbase\Models\User;
 use Fleetbase\Support\Utils;
 use Illuminate\Http\Request;
 
@@ -23,14 +24,17 @@ class ContactController extends Controller
     public function create(CreateContactRequest $request)
     {
         // get request input
-        $input = $request->only(['name', 'type', 'title', 'email', 'phone', 'meta']);
+        $input          = $request->only(['name', 'type', 'title', 'email', 'phone', 'meta', 'type']);
+        $input['phone'] = is_string($input['phone']) ? Utils::formatPhoneNumber($input['phone']) : $input['phone'];
+        $input['type']  = empty($input['type']) ? 'contact' : $input['type'];
 
         try {
             // create the contact
             $contact = Contact::updateOrCreate(
                 [
                     'company_uuid' => session('company'),
-                    'name'         => strtoupper($input['name']),
+                    'name'         => $input['name'],
+                    'email'        => $input['email'],
                 ],
                 $input
             );
@@ -120,7 +124,6 @@ class ContactController extends Controller
      */
     public function delete($id)
     {
-        // find for the driver
         try {
             $contact = Contact::findRecordOrFail($id);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
@@ -132,8 +135,18 @@ class ContactController extends Controller
             );
         }
 
-        // delete the contact
-        $contact->delete();
+        try {
+            // delete the contact
+            $contact->delete();
+
+            // Delete related user if any
+            $user = User::where(['uuid' => $contact->user_uuid, 'type' => $contact->type])->first();
+            if ($user) {
+                $user->delete();
+            }
+        } catch (\Exception $e) {
+            return response()->apiError($e->getMessage());
+        }
 
         // response the contact resource
         return new DeletedResource($contact);
