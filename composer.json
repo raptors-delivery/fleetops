@@ -23,7 +23,7 @@
     "require": {
         "php": "^8.0",
         "fleetbase/core-api": "*",
-        "barryvdh/laravel-dompdf": "^2.0",
+        "barryvdh/laravel-dompdf": "^3.1",
         "brick/geo": "0.7.2",
         "cknow/laravel-money": "^7.1",
         "geocoder-php/google-maps-places-provider": "^1.4",
